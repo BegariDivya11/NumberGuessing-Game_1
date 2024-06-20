@@ -1,0 +1,63 @@
+package internship;
+import javax.swing.JOptionPane;
+import java.util.Random;
+
+
+public class NumberGuessing {
+    private static final int MAX_ATTEMPTS = 10;
+    private static final int RANGE_START = 1;
+    private static final int RANGE_END = 100;
+
+    public static void main(String[] args) {
+        Random random = new Random();
+        int totalScore = 0;
+        int rounds = 3;
+
+        JOptionPane.showMessageDialog(null, "Welcome to the Guess the Number Game!");
+
+        for (int round = 1; round <= rounds; round++) {
+            JOptionPane.showMessageDialog(null, "Round " + round + " of " + rounds);
+            int numberToGuess = random.nextInt(RANGE_END - RANGE_START + 1) + RANGE_START;
+            boolean isGuessed = false;
+            int attempts = 0;
+
+            while (attempts < MAX_ATTEMPTS && !isGuessed) {
+                String userGuessStr = JOptionPane.showInputDialog(
+                        null,
+                        "Attempt " + (attempts + 1) + " of " + MAX_ATTEMPTS +
+                        "\nEnter your guess (between " + RANGE_START + " and " + RANGE_END + "):"
+                );
+                if (userGuessStr == null) {
+                    JOptionPane.showMessageDialog(null, "Game aborted.");
+                    System.exit(0);
+                }
+                int userGuess;
+                try {
+                    userGuess = Integer.parseInt(userGuessStr);
+                } catch (NumberFormatException e) {
+                    JOptionPane.showMessageDialog(null, "Please enter a valid number.");
+                    continue;
+                }
+                attempts++;
+
+                if (userGuess == numberToGuess) {
+                    JOptionPane.showMessageDialog(null, "Congratulations! You guessed the correct number.");
+                    isGuessed = true;
+                    int points = (MAX_ATTEMPTS - attempts + 1) * 10;
+                    totalScore += points;
+                    JOptionPane.showMessageDialog(null, "You earned " + points + " points.");
+                } else if (userGuess < numberToGuess) {
+                    JOptionPane.showMessageDialog(null, "Your guess is lower than the number.");
+                } else {
+                    JOptionPane.showMessageDialog(null, "Your guess is higher than the number.");
+                }
+            }
+
+            if (!isGuessed) {
+                JOptionPane.showMessageDialog(null, "Sorry, you've used all attempts. The correct number was " + numberToGuess + ".");
+            }
+        }
+
+        JOptionPane.showMessageDialog(null, "Game over! Your total score is: " + totalScore);
+    }
+}
